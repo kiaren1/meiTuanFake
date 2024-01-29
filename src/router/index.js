@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import {showToast} from 'vant'
 import home from '../views/home/shoppingHome.vue'
 import order from '../views/order/shoppingOrder.vue'
@@ -81,7 +81,7 @@ meta: {
 // 注意要先创建和初始化router
 const router =createRouter(
     {
-    history:createWebHistory(),
+    history:createWebHashHistory(),
     routes
 },
 );

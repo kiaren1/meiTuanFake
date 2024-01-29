@@ -108,11 +108,11 @@ function logOut() {
 
 function init() {
   let userName = localStorage.getItem("onlineUser");
-  console.log("Info页面中userName");
-  console.log(userName);
+  // console.log("Info页面中userName");
+  // console.log(userName);
   let userInfoJson = localStorage.getItem(`${userName}Info`);
-  console.log("Info页面中userInfoJson");
-  console.log(userInfoJson);
+  // console.log("Info页面中userInfoJson");
+  // console.log(userInfoJson);
 
   if (userInfoJson) {
     let userInfo_new = JSON.parse(userInfoJson);

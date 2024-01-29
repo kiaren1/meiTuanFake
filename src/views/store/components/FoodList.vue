@@ -22,14 +22,14 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import { onMounted } from "vue";
+// import { onMounted } from "vue";
 import { defineProps } from "vue";
 import FoodListItem from "./FoodListItem.vue";
 
-onMounted(() => {
-  // initData();
-  console.log(props.foodData.items);
-});
+// onMounted(() => {
+//   // initData();
+//   console.log(props.foodData.items);
+// });
 // 定义接收的 prop
 const props = defineProps(["foodData"]);
 
