@@ -4,20 +4,37 @@
     <div class="img">米团</div>
     <van-form @submit="onSubmit" class="inPut">
       <van-field
-        v-model="username"
-        name="user"
-        label="用户名"
-        placeholder="用户名"
-        :rules="[{ required: true, message: '请填写用户名' }]"
+        v-model="nickName"
+        name="nickName"
+        label="昵称"
+        placeholder="昵称"
+        :rules="[{ required: true, message: '请设置昵称' }]"
       />
 
       <van-field
-        v-model="password"
+        v-model="userName"
+        name="userName"
+        label="用户名"
+        placeholder="用户名"
+        :rules="[{ required: true, message: '请设置用户名' }]"
+      />
+
+      <van-field
+        v-model="passwordOne"
         type="password"
-        name="pass"
+        name="passOne"
         label="密码"
         placeholder="密码"
-        :rules="[{ required: true, message: '请填写密码' }]"
+        :rules="[{ required: true, message: '请设置密码' }]"
+      />
+
+      <van-field
+        v-model="passwordTwo"
+        type="password"
+        name="passTwo"
+        label="密码"
+        placeholder="密码"
+        :rules="[{ required: true, message: '请确认密码' }]"
       />
       <div>
         <van-button
@@ -52,33 +69,58 @@ import { useRouter } from "vue-router";
 import { showToast } from "vant";
 import { ref } from "vue";
 let router = useRouter();
-const username = ref("");
-const password = ref("");
+
+let nickName = ref("");
+let userName = ref("");
+let passwordOne = ref("");
+let passwordTwo = ref("");
+
 function toLogIn() {
   router.push("/LogIn");
 }
 
-//注册请求处理
-function onSubmit() {
-  let userNameStr = username.value;
-  let passWordStr = password.value;
-  alert("进入注册");
-  if (localStorage.getItem(userNameStr)) {
-    showToast("用户名已存在");
-    return { state: -1, errMsg: "该用户名已经存在" };
+//注册请求的判断处理
+function onSubmit(value) {
+  let judgmentResult = judgment(value);
+  if (judgmentResult === 0) {
+    showToast("两次密码不一致,重新输入");
+    return;
+  }
+  // console.log(JSON.stringify(value));
+  // console.log(value);
+  let enteredUserName = userName.value;
+  if (localStorage.getItem(enteredUserName)) {
+    showToast("ID已存在,请重新设置");
   } else {
-    localStorage.setItem(userNameStr, passWordStr);
-    showToast("注册成功,来登录叭");
+    register();
+  }
+}
+//判断两次密码是否一样
+function judgment(value) {
+  if (value.passwordOne === value.passwordTwo) {
+    return 1;
+  } else {
+    return 0;
   }
 }
 
-// //注册实现
-// function register(value) {
-//   alert("进入注册register函数");
-//   localStorage.setItem("userInfo", JSON.stringify(value));
-//   showToast("注册成功");
-//   router.push("/logIn");
-// }
+//注册操作
+function register() {
+  initUserInfo(userName.value);
+  localStorage.setItem(userName.value, passwordOne.value);
+  showToast("注册成功,自动跳转登录页面");
+  router.push("/login");
+}
+
+function initUserInfo(username) {
+  let userInfo = {
+    nickName: nickName.value,
+    sign: "问渠哪得清如许，为有源头活水来",
+  };
+  let userInfoJson = JSON.stringify(userInfo);
+  //存储用户信息
+  localStorage.setItem(`${username}Info`, userInfoJson);
+}
 </script>
 
 <style scoped lang="less">

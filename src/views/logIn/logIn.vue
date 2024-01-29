@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <shoppingHeader title="注册"></shoppingHeader>
+    <shoppingHeader title="登录"></shoppingHeader>
     <div class="img">米团</div>
     <van-form @submit="onSubmit" class="inPut">
       <van-field
@@ -28,7 +28,7 @@
           color="#ffc400"
           class="button"
         >
-          注册
+          登录
         </van-button>
 
         <van-button
@@ -39,7 +39,7 @@
           class="button"
           @click="toRegister"
         >
-          去登录
+          去注册
         </van-button>
       </div>
     </van-form>
@@ -59,24 +59,33 @@ let router = useRouter();
 function toRegister() {
   router.push("/registerPage");
 }
+
+//提交表单请求
 function onSubmit() {
   let response = login_local();
   checkResponse(response);
 }
+
+//登录逻辑
 function login_local() {
-  let userNameStr = username.value;
   let passWordStr = password.value;
-  let pass = localStorage.getItem(userNameStr);
-  if (pass) {
-    if (passWordStr === pass) {
-      return { state: 200 };
-    }
-  } else return { state: -1 };
+  let storedPass = localStorage.getItem(username.value);
+
+  if (storedPass && passWordStr === storedPass) {
+    alert("密码匹配成功");
+    return { state: 200 };
+  } else {
+    alert("密码匹配失败");
+    return { state: -1 };
+  }
 }
+
+//根据返回值执行操作
 function checkResponse(response) {
   if (response.state === 200) {
     localStorage.setItem("isLogin", "login");
-    localStorage.setItem("username", username.value);
+    localStorage.setItem("onlineUser", username.value);
+    console.log(localStorage.getItem("onlineUser"));
     showToast("登录成功");
     router.push("/home");
   } else {

@@ -6,8 +6,9 @@
         <div class="info">
           <img src="/header.png" />
           <div class="user-desc">
-            <span class="name">昵称：{{ name }}</span>
-            <span class="describe">个性签名：{{ describe }}</span>
+            <span class="name">昵称：{{ userInfo.nickName }}</span>
+            <span class="describe" style="font-size: 15px">个性签名：</span>
+            <span style="font-size: 12px">{{ userInfo.sign }}</span>
           </div>
         </div>
       </div>
@@ -34,14 +35,40 @@
 import shoppingFooter from "../../components/shoppingFooter";
 import shoppingHeader from "../../components/shoppingHeader.vue";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { reactive, onMounted } from "vue";
 
-let name = ref("咔咔");
-let describe = ref("问渠哪得清如许，为有源头活水来");
 let router = useRouter();
+
+let userInfo = reactive({
+  nickName: "未初始化1",
+  sign: "未初始化2",
+});
+
+onMounted(() => {
+  init();
+});
 
 function go(path) {
   router.push(path);
+}
+
+function init() {
+  let userName = localStorage.getItem("onlineUser");
+  // console.log("Mine页面:userName是");
+  // console.log(userName);
+  let userInfoJson = localStorage.getItem(`${userName}Info`);
+  // console.log("Mine页面:userInfoJson是");
+  // console.log(userInfoJson);
+  if (userInfoJson) {
+    let userInfo_new = JSON.parse(userInfoJson);
+    if (userInfo_new) {
+      userInfo.nickName = userInfo_new.nickName;
+      userInfo.sign = userInfo_new.sign;
+    }
+  } else {
+    // 处理 userInfoJson 为 null 的情况
+    console.log("未找到用户信息");
+  }
 }
 </script>
 
@@ -76,7 +103,6 @@ function go(path) {
           flex-direction: column;
           margin-left: 10px;
           line-height: 20px;
-          font-size: 18px;
           color: #fff;
           justify-content: space-between;
           span {
